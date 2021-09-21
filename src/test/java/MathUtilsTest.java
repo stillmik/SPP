@@ -25,8 +25,5 @@ class MathUtilsTest {
         //assertArrayEquals();
         //assertIterableEquals(); verify if positions are equals
         //assertFalse()
-        //
-
     }
-
 }

@@ -2,32 +2,46 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collections;
 
-public class MathOperations {
+class MathOperations {
+
+    private TimeTracer timeTracer = new TimeTracer();
 
     MathOperations(){
+        Integer[] smallArr=new Integer[10000];
+        Integer[] mediumArr=new Integer[100000];
+        Integer[] largeArr=new Integer[1000000];
+        Integer[] giantArr=new Integer[10000000];
+
         fillArrayWithRandNumbers(smallArr);
         fillArrayWithRandNumbers(mediumArr);
-        //fillArrayWithRandNumbers(largeArr);
+        fillArrayWithRandNumbers(largeArr);
+        fillArrayWithRandNumbers(giantArr);
+
         sortArray(smallArr);
         sortArray(mediumArr);
-        //sortArray(largeArr);
-        soutArray(smallArr);
-        soutArray(mediumArr);
+        sortArray(largeArr);
+        sortArray(giantArr);
+
+        //soutArray(smallArr);
+        //soutArray(mediumArr);
         //soutArray(largeArr);
+        //soutArray(giantArr);
     }
 
-    private Integer[] smallArr=new Integer[1000];
-    private Integer[] mediumArr=new Integer[10000];
-    Integer[] largeArr=new Integer[100000];
-
     private void fillArrayWithRandNumbers(Integer[] arr){
+        timeTracer.startTrace();
         for(int i=0;i<arr.length;i++){
             arr[i] = (int) (Math.random()*2000-1000);
         }
+        timeTracer.stopTrace();
+        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
     private void sortArray(Integer[] arr){
+        timeTracer.startTrace();
         Arrays.sort(arr);
+        timeTracer.stopTrace();
+        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
     private void soutArray(Integer[] arr){
