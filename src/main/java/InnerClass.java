@@ -14,7 +14,6 @@ class InnerClass {
         }
         increment(arr);
         timeTracer.stopTrace();
-        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
     private void increment(Integer[] arr){
@@ -23,7 +22,6 @@ class InnerClass {
             arr[i]=arr[i]+1;
         }
         timeTracer.stopTrace();
-        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
     private void mathSleep500(){
@@ -34,7 +32,6 @@ class InnerClass {
             e.printStackTrace();
         }
         timeTracer.stopTrace();
-        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
     void mathSleep1000(){
@@ -46,7 +43,6 @@ class InnerClass {
             e.printStackTrace();
         }
         timeTracer.stopTrace();
-        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
 }

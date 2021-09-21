@@ -3,6 +3,7 @@ import java.util.Stack;
 public class TimeTracer implements Tracer {
 
     private Stack<Long> startTimeStack = new Stack<>();
+    private TraceResult traceResult=new TraceResult();
 
     private long processingTime;
 
@@ -15,11 +16,12 @@ public class TimeTracer implements Tracer {
     @Override
     public void stopTrace() {
         processingTime = System.currentTimeMillis() - startTimeStack.pop();
-    }
+        traceResult.addToResult(getMethodName(),processingTime,getClassName());
+;    }
 
     @Override
     public TraceResult getTraceResult() {
-        return new TraceResult(getMethodName(),processingTime,getClassName());
+        return  traceResult;
     }
 
     private String getMethodName(){

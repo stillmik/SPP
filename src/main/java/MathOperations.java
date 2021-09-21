@@ -27,6 +27,7 @@ class MathOperations {
 
         mathSleep();
         mathSleepLong();
+        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
     private void fillArrayWithRandNumbers(Integer[] arr){
@@ -76,7 +77,6 @@ class MathOperations {
             e.printStackTrace();
         }
         timeTracer.stopTrace();
-        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
     private void mathSleepLong(){
@@ -88,7 +88,6 @@ class MathOperations {
             e.printStackTrace();
         }
         timeTracer.stopTrace();
-        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
 }
