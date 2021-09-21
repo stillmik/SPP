@@ -1,20 +1,20 @@
+import java.util.Stack;
 
 public class TimeTracer implements Tracer {
 
-    private long startTime;
-    private long stopTime;
+    private Stack<Long> startTimeStack = new Stack<>();
+
     private long processingTime;
 
     @Override
     public void startTrace() {
-        startTime=stopTime=processingTime=0;
-        startTime = System.currentTimeMillis();
+        processingTime=0;
+        startTimeStack.push(System.currentTimeMillis());
     }
 
     @Override
     public void stopTrace() {
-        stopTime = System.currentTimeMillis();
-        processingTime = stopTime - startTime;
+        processingTime = System.currentTimeMillis() - startTimeStack.pop();
     }
 
     @Override

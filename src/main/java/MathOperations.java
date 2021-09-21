@@ -5,6 +5,7 @@ import java.util.Collections;
 class MathOperations {
 
     private TimeTracer timeTracer = new TimeTracer();
+    private InnerClass innerClass=new InnerClass(timeTracer);
 
     MathOperations(){
         Integer[] smallArr=new Integer[10000];
@@ -12,20 +13,20 @@ class MathOperations {
         Integer[] largeArr=new Integer[1000000];
         Integer[] giantArr=new Integer[10000000];
 
-        fillArrayWithRandNumbers(smallArr);
-        fillArrayWithRandNumbers(mediumArr);
-        fillArrayWithRandNumbers(largeArr);
-        fillArrayWithRandNumbers(giantArr);
+        //fillArrayWithRandNumbers(smallArr);
+        //fillArrayWithRandNumbers(mediumArr);
+        //fillArrayWithRandNumbers(largeArr);
+        //fillArrayWithRandNumbers(giantArr);
 
-        sortArray(smallArr);
-        sortArray(mediumArr);
-        sortArray(largeArr);
-        sortArray(giantArr);
+        //sortArray(smallArr);
+        //sortArray(mediumArr);
+        //sortArray(largeArr);
+        //sortArray(giantArr);
 
-        //soutArray(smallArr);
-        //soutArray(mediumArr);
-        //soutArray(largeArr);
-        //soutArray(giantArr);
+        //tripleIncrement(largeArr);
+
+        mathSleep();
+        mathSleepLong();
     }
 
     private void fillArrayWithRandNumbers(Integer[] arr){
@@ -44,6 +45,16 @@ class MathOperations {
         System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
+    private void tripleIncrement(Integer[] arr){
+        timeTracer.startTrace();
+        for(int i=0;i<arr.length;i++){
+            arr[i]=arr[i]+1;
+        }
+        innerClass.doubleIncrement(arr);
+        timeTracer.stopTrace();
+        System.out.println(timeTracer.getTraceResult().getTraceResult());
+    }
+
     private void soutArray(Integer[] arr){
         int j=0;
         for(Integer el: arr){
@@ -55,6 +66,29 @@ class MathOperations {
             j++;
         }
         System.out.println("\n\n");
+    }
+
+    private void mathSleep(){
+        timeTracer.startTrace();
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        timeTracer.stopTrace();
+        System.out.println(timeTracer.getTraceResult().getTraceResult());
+    }
+
+    private void mathSleepLong(){
+        timeTracer.startTrace();
+        try {
+            Thread.sleep(500);
+            innerClass.mathSleep1000();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        timeTracer.stopTrace();
+        System.out.println(timeTracer.getTraceResult().getTraceResult());
     }
 
 }
