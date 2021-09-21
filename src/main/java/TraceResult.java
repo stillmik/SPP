@@ -1,6 +1,7 @@
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
+import org.json.JSONObject;
+import org.json.XML;
+import org.json.JSONException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -14,6 +15,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 
@@ -26,12 +28,14 @@ class TraceResult {
     }
 
     String getTraceResult() {
-        traceResult = traceResult + "</root>";
+        finishString();
         makeXML();
+        makeJSON();
         return traceResult;
     }
 
     private void makeXML() {
+
         try {
             DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
             DocumentBuilder docBuilder;
@@ -39,7 +43,7 @@ class TraceResult {
 
             docBuilder = builderFactory.newDocumentBuilder();
             doc = docBuilder.parse(new InputSource(new StringReader(traceResult)));
-            // Записываем XML в файл
+
             try {
                 Transformer trans = TransformerFactory.newInstance().newTransformer();
                 DOMSource source = new DOMSource(doc);
@@ -51,12 +55,26 @@ class TraceResult {
             } catch (TransformerException | IOException e) {
                 e.printStackTrace(System.out);
             }
-        } catch (ParserConfigurationException e) {
+        } catch (ParserConfigurationException | IOException | SAXException e) {
             e.printStackTrace();
-        } catch (SAXException e) {
-            e.printStackTrace();
+        }
+    }
+
+    private void makeJSON(){
+        JSONObject object = XML.toJSONObject(traceResult);
+        String jsonFilePath = System.getProperty("user.dir")+"\\file.json";
+        try {
+            FileWriter fileWriter = new FileWriter(jsonFilePath);
+            fileWriter.write(object.toString(4));
+            fileWriter.flush();
+            fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+    }
+
+    private void finishString(){
+        traceResult = traceResult + "</root>";
     }
 }
