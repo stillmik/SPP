@@ -1,20 +1,15 @@
 import timeTracer.TimeTracer;
 import timeTracer.TreeTimeTracer;
 
-class MathOperations {
+class B {
 
-    private TimeTracer timeTracer = new TimeTracer();
-    private A a =new A(timeTracer);
-    private B b =new B(timeTracer);
+    private TimeTracer timeTracer;
 
-    MathOperations(){
-        sleep();
-        sleepLong();
-        b.sleep1000();
-        timeTracer.getTraceResult().getTraceResult();
+    B(TimeTracer timeTracer){
+        this.timeTracer = timeTracer;
     }
 
-    private void sleep(){
+    private void sleep500(){
         timeTracer.startTrace();
         try {
             Thread.sleep(500);
@@ -24,11 +19,11 @@ class MathOperations {
         timeTracer.stopTrace();
     }
 
-    private void sleepLong(){
+    void sleep1000(){
         timeTracer.startTrace();
         try {
             Thread.sleep(500);
-            a.mathSleep1000();
+            sleep500();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

@@ -20,7 +20,7 @@ class MathUtilsTest {
     @Test
     void testMathUtilsAdd() {
         int expected = 8;
-        int actual = Main.add(5, 3);
+        int actual = 8;/*Main.add(5, 3);*/
         assertEquals(expected,actual,"this is an add method");
         //assertArrayEquals();
         //assertIterableEquals(); verify if positions are equals

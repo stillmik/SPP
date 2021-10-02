@@ -1,7 +1,8 @@
+package timeTracer;
+
 import org.w3c.dom.Document;
 import org.json.JSONObject;
 import org.json.XML;
-import org.json.JSONException;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -19,7 +20,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringReader;
 
-class TraceResult {
+public class TraceResult {
 
     private String traceResult = "<root>";
 
@@ -27,7 +28,7 @@ class TraceResult {
         this.traceResult = this.traceResult + "<method name=\"" + methodName + "\" time=\"" + traceResult + "\" class=\"" + className + "\">" + "</method>";
     }
 
-    String getTraceResult() {
+    public String getTraceResult() {
         finishString();
         makeXML();
         makeJSON();
