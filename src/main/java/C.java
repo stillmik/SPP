@@ -1,26 +1,16 @@
 import timeTracer.TimeTracer;
 
-class A {
-
+class C {
     private TimeTracer timeTracer;
-    private C c;
 
-    A(TimeTracer timeTracer){
+    C(TimeTracer timeTracer){
         this.timeTracer = timeTracer;
-        c =new C(timeTracer);
     }
 
-    private void mathSleep500(){
-        timeTracer.startTrace();
-        c.mathSleep500();
-        timeTracer.stopTrace();
-    }
-
-    void mathSleep1000(){
+    void mathSleep500(){
         timeTracer.startTrace();
         try {
             Thread.sleep(500);
-            mathSleep500();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

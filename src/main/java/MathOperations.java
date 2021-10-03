@@ -1,5 +1,4 @@
 import timeTracer.TimeTracer;
-import timeTracer.TreeTimeTracer;
 
 class MathOperations {
 
@@ -11,7 +10,8 @@ class MathOperations {
         sleep();
         sleepLong();
         b.sleep1000();
-        timeTracer.getTraceResult().getTraceResult();
+        //timeTracer.getTraceResult().getTraceResult();
+        timeTracer.print();
     }
 
     private void sleep(){

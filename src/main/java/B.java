@@ -1,5 +1,4 @@
 import timeTracer.TimeTracer;
-import timeTracer.TreeTimeTracer;
 
 class B {
 
