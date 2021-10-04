@@ -7,19 +7,14 @@ import java.util.ArrayList;
 public class TimeTracer implements Tracer {
 
     private Tree tree = new Tree();
-    private TraceResult traceResult;
-
-    private String methodClassName;
-    private String methodName;
-
-    private long processingTime;
-    private long startTime;
+    TraceResult traceResult = new TraceResult(tree);
 
     @Override
     public void startTrace() {
-        tree.appendChild(tree.getRoot(), getMethodNode());
-        processingTime = 0;
-        startTime = System.currentTimeMillis();
+        long startTime = System.currentTimeMillis();
+        Node methodNode = getMethodNode();
+        methodNode.time = startTime;
+        tree.appendChild(tree.getRoot(), methodNode);
     }
 
     private String getMethodsAddress() {
@@ -43,21 +38,12 @@ public class TimeTracer implements Tracer {
         return methodNode;
     }
 
-    public void print() {
-        Node root = tree.getRoot();
-        printing(root);
-    }
-
-    private void printing(Node node){
-        for(int i=0;i<node.children.size();i++){
-            node.printChildren();
-            printing(node.children.get(i));
-        }
-    }
-
     @Override
     public void stopTrace() {
-        processingTime = System.currentTimeMillis() - startTime;
+        long stopTime = System.currentTimeMillis();
+        Node pathNode = getMethodNode();
+        pathNode.time = stopTime;
+        tree.setTime(tree.getRoot(),pathNode);
     }
 
     @Override

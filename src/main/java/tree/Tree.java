@@ -1,5 +1,7 @@
 package tree;
 
+import timeTracer.Type;
+
 import java.util.ArrayList;
 
 public class Tree {
@@ -8,39 +10,56 @@ public class Tree {
 
     public Tree() {
         root.address = "";
+        root.name ="root";
         root.children = new ArrayList<>();
     }
 
-    public void appendChild(Node current, Node append) {
-        System.out.println("\nBEGIN:"+ " current:"  + current.address + " append: " + append.address);
+    public void setTime(Node current,Node pathNode){
 
-        String thisStepAddress = getThisStepAddress(append, current.address);
-
+        String nextStepAddress = getThisStepAddress(pathNode, current.address);
         for (int i = 0; i < current.children.size(); i++) {
-            System.out.println("parent: " + current.address + " child: " + current.children.get(i).address);
-            if (thisStepAddress.equals(current.children.get(i).address)) {//вглубь
-                System.out.println("идем к ребенку: " + current.children.get(i).address);
+            if (nextStepAddress.equals(current.children.get(i).address)) {//вглубь
+                setTime(current.children.get(i), pathNode);
+                return;
+            }
+        }
+        current.time=pathNode.time-current.time;
+        System.out.println("TIME: "+current.time);
+    }
+
+    public void appendChild(Node current, Node append) {
+
+        String nextStepAddress = getThisStepAddress(append, current.address);
+        for (int i = 0; i < current.children.size(); i++) {
+            if (nextStepAddress.equals(current.children.get(i).address)) {//вглубь
                 appendChild(current.children.get(i), append);
                 return;
             }
         }
-        if (append.address.equals(thisStepAddress)) {
-            System.out.println("создаем ноду: " + thisStepAddress);
-            createNode(thisStepAddress, current, append);
+        if (append.address.equals(nextStepAddress)) {
+            createNode(nextStepAddress, current, append);
         } else {
-            System.out.println("создаем путь: " + thisStepAddress);
-            appendChild(createNode(thisStepAddress, current, append), append);
+            appendChild(createNode(nextStepAddress, current, append), append);
         }
     }
 
     private Node createNode(String thisStepAddress, Node current, Node append) {
-        Node node = new Node();
-        node.children = new ArrayList<>();
-        node.address = thisStepAddress;
-        node.name = getName(thisStepAddress);
-        current.children.add(node);
-        System.out.println("NEW NODE: nodeAddress: " + node.address + " currentAddress: " + current.address + " append: " + append.address);
-        return node;
+        if(append.address.equals(thisStepAddress)){
+            append.name = getName(thisStepAddress);
+            current.children.add(append);
+            System.out.println("NAME: " + append.name);
+            System.out.println("NEW APPENDNODE: nodeAddress: " + append.address + " currentAddress: " + current.address + " append: " + append.address);
+            return append;
+        }else {
+            Node newNode = new Node();
+            newNode.children = new ArrayList<>();
+            newNode.address = thisStepAddress;
+            newNode.name = getName(thisStepAddress);
+            current.children.add(newNode);
+            System.out.println("NAME: " + newNode.name);
+            System.out.println("NEW NODE: nodeAddress: " + newNode.address + " currentAddress: " + current.address + " append: " + append.address);
+            return newNode;
+        }
     }
 
     private String getName(String thisStepAddress) {
@@ -55,22 +74,19 @@ public class Tree {
     }
 
     private String getThisStepAddress(Node append, String prevStepAddress) {
-        if (append.address.equals(prevStepAddress))
-            return append.name.concat(prevStepAddress);
-        String thisStepAddress = "";
-        String thisStepPiece = append.address;
-        thisStepPiece = thisStepPiece.replace(prevStepAddress, "");
-        int i = thisStepPiece.length() - 1;
+        String nextStepAddress = "";
+        String nextStepPiece = append.address;
+        nextStepPiece = nextStepPiece.replace(prevStepAddress, "");
+        int i = nextStepPiece.length() - 1;
         while (i >= 0) {
-            if (thisStepPiece.charAt(i) == '~') {
-                thisStepAddress = thisStepPiece.substring(i + 1);
+            if (nextStepPiece.charAt(i) == '~') {
+                nextStepAddress = nextStepPiece.substring(i + 1);
                 break;
             }
             i--;
         }
-        thisStepAddress = "~".concat(thisStepAddress.concat(prevStepAddress));
-        System.out.println("thisStep: " + thisStepAddress);
-        return thisStepAddress;
+        nextStepAddress = "~".concat(nextStepAddress.concat(prevStepAddress));
+        return nextStepAddress;
     }
 
     public Node getRoot() {

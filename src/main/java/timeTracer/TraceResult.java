@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import org.json.XML;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
+import tree.Node;
+import tree.Tree;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -23,13 +25,47 @@ import java.io.StringReader;
 public class TraceResult {
 
     private String traceResult = "<root>";
+    private Tree tree;
 
-    void addToResult(String methodName, long traceResult, String className) {
-        this.traceResult = this.traceResult + "<method name=\"" + methodName + "\" time=\"" + traceResult + "\" class=\"" + className + "\">" + "</method>";
+    TraceResult(Tree tree) {
+        this.tree = tree;
+    }
+
+    private void traverseTree(Node current) {
+        for (int i = 0; i < current.children.size(); i++) {
+            Type type = getTypeOfNode(current);
+            if (type != Type.ROOT) {
+                open(current);
+            }
+            traverseTree(current.children.get(i));
+            if (type != Type.ROOT) {
+                close(current);
+            }
+        }
+    }
+
+    private Type getTypeOfNode(Node node){
+        if(node.name.equals("root")){
+            return Type.ROOT;
+        }
+        if(node.name.endsWith("()")) {
+            return Type.METHOD;
+        }else {
+            return Type.THREAD;
+        }
+    }
+
+    private void open(Node current){
+        traceResult= traceResult +"<"+getTypeOfNode(current).toString().toLowerCase() +" name=\""+current.name.substring(1).replaceAll("[<>]","")+"\""+ " time=\"" + current.time+"\""+">";
+    }
+    private void close(Node current){
+        traceResult = traceResult + "</"+getTypeOfNode(current).toString().toLowerCase()+ ">"+"";
     }
 
     public String getTraceResult() {
+        traverseTree(tree.getRoot());
         finishString();
+        System.out.println(traceResult);
         makeXML();
         makeJSON();
         return traceResult;
@@ -61,9 +97,9 @@ public class TraceResult {
         }
     }
 
-    private void makeJSON(){
+    private void makeJSON() {
         JSONObject object = XML.toJSONObject(traceResult);
-        String jsonFilePath = System.getProperty("user.dir")+"\\file.json";
+        String jsonFilePath = System.getProperty("user.dir") + "\\file.json";
         try {
             FileWriter fileWriter = new FileWriter(jsonFilePath);
             fileWriter.write(object.toString(4));
@@ -75,7 +111,7 @@ public class TraceResult {
 
     }
 
-    private void finishString(){
+    private void finishString() {
         traceResult = traceResult + "</root>";
     }
 }
