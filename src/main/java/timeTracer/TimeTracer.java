@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 public class TimeTracer implements Tracer {
 
-    private Tree tree = new Tree();
-    TraceResult traceResult = new TraceResult(tree);
+    private static Tree tree = new Tree();
+    private TraceResult traceResult = new TraceResult(tree);
 
     @Override
     public void startTrace() {

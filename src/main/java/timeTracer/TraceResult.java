@@ -25,10 +25,10 @@ import java.io.StringReader;
 public class TraceResult {
 
     private String traceResult = "<root>";
-    private Tree tree;
+    private static Tree tree;
 
     TraceResult(Tree tree) {
-        this.tree = tree;
+        TraceResult.tree = tree;
     }
 
     private void traverseTree(Node current) {
@@ -44,22 +44,50 @@ public class TraceResult {
         }
     }
 
-    private Type getTypeOfNode(Node node){
-        if(node.name.equals("root")){
+    private Type getTypeOfNode(Node node) {
+        if (node.name.equals("root")) {
             return Type.ROOT;
         }
-        if(node.name.endsWith("()")) {
+        if (node.name.endsWith("()")) {
             return Type.METHOD;
-        }else {
+        } else {
             return Type.THREAD;
         }
     }
 
-    private void open(Node current){
-        traceResult= traceResult +"<"+getTypeOfNode(current).toString().toLowerCase() +" name=\""+current.name.substring(1).replaceAll("[<>]","")+"\""+ " time=\"" + current.time+"\""+">";
+    private void open(Node current) {
+        Type type = getTypeOfNode(current);
+        if (type == Type.METHOD) {
+            traceResult = traceResult + "<" + type.toString().toLowerCase() + " name=\"" + getMethodName(current) + "\"" + " class=\""+ getClass(current)+"\" time=\"" + current.time + "\"" + ">";
+        } else {
+            traceResult = traceResult + "<" + type.toString().toLowerCase() + " name=\"" + current.name.substring(1).replaceAll("[<>]", "") + "\"" + " time=\"" + current.time + "\"" + ">";
+        }
     }
-    private void close(Node current){
-        traceResult = traceResult + "</"+getTypeOfNode(current).toString().toLowerCase()+ ">"+"";
+
+    private void close(Node current) {
+        Type type = getTypeOfNode(current);
+        if (type == Type.METHOD) {
+            traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
+        } else {
+            traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
+        }
+    }
+
+    private String getClass(Node current) {
+        int i=0;
+        while (current.name.charAt(i)!='.'){
+            i++;
+        }
+        return current.name.substring(1,i);
+    }
+
+    private String getMethodName(Node current) {
+        int i=0;
+        while (current.name.charAt(i)!='.'){
+            i++;
+        }
+        i++;
+        return current.name.substring(i).replaceAll("[<>]", "");
     }
 
     public String getTraceResult() {
