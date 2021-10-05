@@ -13,8 +13,15 @@ public class MathOperations {
 
             microSleep();
             sleepLong();
+            Thread thread1 = new Thread(this::sleepLong);
+            thread1.start();
             B b = new B(timeTracer);
             b.sleep1000();
+            try {
+                thread1.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         });
         thread0.start();
 
@@ -34,6 +41,7 @@ public class MathOperations {
         TraceResult traceResult = timeTracer.getTraceResult();
         traceResult.getJSON();
         traceResult.getXML();
+        traceResult.getXMLandJSONinConsole();
     }
 
     private void microSleep() {
