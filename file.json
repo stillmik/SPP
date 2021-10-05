@@ -1,62 +1,128 @@
 {"root": {"thread": [
     {
         "method": {
-            "method": [
-                {
-                    "name": "init()",
-                    "time": 0,
-                    "class": "MathOperations"
-                },
-                {
-                    "method": {
+            "method": {
+                "method": [
+                    {
+                        "name": "microSleep()",
+                        "time": 554,
+                        "class": "math.MathOperations"
+                    },
+                    {
                         "method": {
                             "method": {
+                                "method": {
+                                    "name": "mathSleep500()",
+                                    "time": 501,
+                                    "class": "math.C"
+                                },
                                 "name": "mathSleep500()",
-                                "time": 503,
-                                "class": "A"
+                                "time": 501,
+                                "class": "math.A"
                             },
                             "name": "mathSleep1000()",
-                            "time": 1004,
-                            "class": "A"
+                            "time": 1003,
+                            "class": "math.A"
                         },
                         "name": "sleepLong()",
-                        "time": 1505,
-                        "class": "MathOperations"
+                        "time": 2005,
+                        "class": "math.MathOperations"
                     },
-                    "name": "init()",
-                    "time": 0,
-                    "class": "MathOperations"
-                },
-                {
-                    "method": {
+                    {
+                        "method": {
+                            "name": "sleep500()",
+                            "time": 502,
+                            "class": "math.B"
+                        },
                         "name": "sleep1000()",
-                        "time": 1017,
-                        "class": "B"
-                    },
-                    "name": "init()",
-                    "time": 0,
-                    "class": "MathOperations"
-                }
-            ],
-            "name": "main()",
+                        "time": 1004,
+                        "class": "math.B"
+                    }
+                ],
+                "name": "lambda$new$0()",
+                "time": 0,
+                "class": "math.MathOperations"
+            },
+            "name": "run()",
             "time": 0,
-            "class": "Main"
+            "class": "java.lang.Thread"
         },
-        "name": "main",
-        "time": 0
+        "id": 14,
+        "time": 6070
     },
     {
         "method": {
             "method": {
-                "name": "sleep1000()",
-                "time": 1017,
-                "class": "B"
+                "method": [
+                    {
+                        "method": {
+                            "method": {
+                                "method": {
+                                    "name": "mathSleep500()",
+                                    "time": 501,
+                                    "class": "math.C"
+                                },
+                                "name": "mathSleep500()",
+                                "time": 501,
+                                "class": "math.A"
+                            },
+                            "name": "mathSleep1000()",
+                            "time": 1003,
+                            "class": "math.A"
+                        },
+                        "name": "sleepLong()",
+                        "time": 2005,
+                        "class": "math.MathOperations"
+                    },
+                    {
+                        "method": {
+                            "name": "sleep500()",
+                            "time": 502,
+                            "class": "math.B"
+                        },
+                        "name": "sleep1000()",
+                        "time": 1004,
+                        "class": "math.B"
+                    }
+                ],
+                "name": "init()",
+                "time": 0,
+                "class": "math.MathOperations"
+            },
+            "name": "main()",
+            "time": 0,
+            "class": "Main"
+        },
+        "id": 1,
+        "time": 5516
+    },
+    {
+        "method": {
+            "method": {
+                "method": {
+                    "method": {
+                        "method": {
+                            "name": "mathSleep500()",
+                            "time": 501,
+                            "class": "math.C"
+                        },
+                        "name": "mathSleep500()",
+                        "time": 501,
+                        "class": "math.A"
+                    },
+                    "name": "mathSleep1000()",
+                    "time": 1003,
+                    "class": "math.A"
+                },
+                "name": "sleepLong()",
+                "time": 2005,
+                "class": "math.MathOperations"
             },
             "name": "run()",
             "time": 0,
-            "class": "MathOperations$1"
+            "class": "java.lang.Thread"
         },
-        "name": "Thread-0",
-        "time": 0
+        "id": 15,
+        "time": 4010
     }
 ]}}

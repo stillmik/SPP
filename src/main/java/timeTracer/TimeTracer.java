@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public class TimeTracer implements Tracer {
 
-    private static Tree tree = new Tree();
+    private Tree tree = new Tree();
     private TraceResult traceResult = new TraceResult(tree);
 
     @Override
@@ -30,10 +30,10 @@ public class TimeTracer implements Tracer {
 
     private Node getMethodNode() {
         Node methodNode = new Node();
-        methodNode.address = getMethodsAddress();
         StackTraceElement stackTraceElement= Thread.currentThread().getStackTrace()[3];
-        StringBuilder element = new StringBuilder();
-        methodNode.name = String.valueOf(element.append("~").append(stackTraceElement.getClassName()).append(".").append(stackTraceElement.getMethodName()).append("()"));
+        methodNode.address = getMethodsAddress();
+        methodNode.id= Thread.currentThread().getId();
+        methodNode.name = "~" + stackTraceElement.getClassName() + "." + stackTraceElement.getMethodName() + "()";
         methodNode.children = new ArrayList<>();
         return methodNode;
     }

@@ -1,3 +1,5 @@
+package math;
+
 import timeTracer.TimeTracer;
 
 class B {

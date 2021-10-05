@@ -24,7 +24,6 @@ public class Tree {
             }
         }
         current.time=pathNode.time-current.time;
-        System.out.println("TIME: "+current.time);
     }
 
     public void appendChild(Node current, Node append) {
@@ -43,21 +42,31 @@ public class Tree {
         }
     }
 
+    private Type getTypeOfNode(Node node) {
+        if (node.name.equals("root")) {
+            return Type.ROOT;
+        }
+        if (node.name.endsWith("()")) {
+            return Type.METHOD;
+        } else {
+            return Type.THREAD;
+        }
+    }
+
     private Node createNode(String thisStepAddress, Node current, Node append) {
         if(append.address.equals(thisStepAddress)){
             append.name = getName(thisStepAddress);
             current.children.add(append);
-            System.out.println("NAME: " + append.name);
-            System.out.println("NEW APPENDNODE: nodeAddress: " + append.address + " currentAddress: " + current.address + " append: " + append.address);
+            System.out.println("NEW APPENDNODE:"+ "nodeType: " +getTypeOfNode(append) +" nodeAddress: " + append.address + " currentAddress: " + current.address + " append: " + append.address);
             return append;
         }else {
             Node newNode = new Node();
             newNode.children = new ArrayList<>();
             newNode.address = thisStepAddress;
             newNode.name = getName(thisStepAddress);
+            newNode.id = append.id;
             current.children.add(newNode);
-            System.out.println("NAME: " + newNode.name);
-            System.out.println("NEW NODE: nodeAddress: " + newNode.address + " currentAddress: " + current.address + " append: " + append.address);
+            System.out.println("NEW NODE:"+ "nodeType: " +getTypeOfNode(newNode) + " nodeAddress: " + newNode.address + " currentAddress: " + current.address + " append: " + append.address);
             return newNode;
         }
     }

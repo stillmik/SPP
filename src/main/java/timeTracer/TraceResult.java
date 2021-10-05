@@ -17,30 +17,93 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringReader;
+import java.io.*;
 
 public class TraceResult {
 
+    private String PATH_TO_XML = "C:\\Users\\User\\IdeaProjects\\dark\\other.xml";
+    private String PATH_TO_JSON = "C:\\Users\\User\\IdeaProjects\\dark\\file.json";
+
     private String traceResult = "<root>";
-    private static Tree tree;
+    private Tree tree;
 
     TraceResult(Tree tree) {
-        TraceResult.tree = tree;
+        this.tree = tree;
+    }
+
+    public void getXML(){
+        traceResult="<root>";
+        traverseTree(tree.getRoot());
+        finishString();
+        System.out.println(traceResult);
+        makeXML();
+    }
+
+    public void getXMLandJSON(){
+        traceResult="<root>";
+        traverseTree(tree.getRoot());
+        finishString();
+        System.out.println(traceResult);
+        makeXML();
+        makeJSON();
+    }
+
+    public void getJSON(){
+        traceResult="<root>";
+        traverseTree(tree.getRoot());
+        finishString();
+        System.out.println(traceResult);
+        makeXML();
+        File file = new File(PATH_TO_XML);
+        file.delete();
+        makeJSON();
     }
 
     private void traverseTree(Node current) {
+        Type type = getTypeOfNode(current);
+        if (type != Type.ROOT) {
+            open(current);
+        }
         for (int i = 0; i < current.children.size(); i++) {
-            Type type = getTypeOfNode(current);
-            if (type != Type.ROOT) {
-                open(current);
-            }
             traverseTree(current.children.get(i));
-            if (type != Type.ROOT) {
-                close(current);
-            }
+        }
+        if (type != Type.ROOT) {
+            close(current);
+        }
+    }
+
+    private void open(Node current) {
+        Type type = getTypeOfNode(current);
+        if (type == Type.METHOD) {
+            traceResult = traceResult + "<" + type.toString().toLowerCase() + " name=\"" + getMethodName(current) + "\"" + " class=\"" + getClass(current) + "\" time=\"" + current.time + "\"" + ">";
+        } else {
+            traceResult = traceResult + "<" + type.toString().toLowerCase() + " id=\"" + getThreadId(current) + "\"" + " time=\"" + getTimeOfThread(current) + "\"" + ">";
+        }
+    }
+
+    private void close(Node current) {
+        Type type = getTypeOfNode(current);
+        if (type == Type.METHOD) {
+            traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
+        } else {
+            traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
+        }
+    }
+
+    private String getTimeOfThread(Node current) {
+        Time time=new Time();
+        time.time=0;
+        for (int i = 0; i < current.children.size(); i++) {
+            time.time = time.time + Math.toIntExact(current.children.get(i).time);
+            timeOfThreadRecursion(current.children.get(i), time);
+        }
+        return Integer.toString(time.time);
+    }
+
+    private void timeOfThreadRecursion(Node current, Time time) {
+        for (int i = 0; i < current.children.size(); i++) {
+            time.time = time.time + Math.toIntExact(current.children.get(i).time);
+            timeOfThreadRecursion(current.children.get(i), time);
         }
     }
 
@@ -55,48 +118,32 @@ public class TraceResult {
         }
     }
 
-    private void open(Node current) {
-        Type type = getTypeOfNode(current);
-        if (type == Type.METHOD) {
-            traceResult = traceResult + "<" + type.toString().toLowerCase() + " name=\"" + getMethodName(current) + "\"" + " class=\""+ getClass(current)+"\" time=\"" + current.time + "\"" + ">";
-        } else {
-            traceResult = traceResult + "<" + type.toString().toLowerCase() + " name=\"" + current.name.substring(1).replaceAll("[<>]", "") + "\"" + " time=\"" + current.time + "\"" + ">";
-        }
-    }
-
-    private void close(Node current) {
-        Type type = getTypeOfNode(current);
-        if (type == Type.METHOD) {
-            traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
-        } else {
-            traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
-        }
-    }
-
     private String getClass(Node current) {
-        int i=0;
-        while (current.name.charAt(i)!='.'){
-            i++;
+        int end = current.name.length() - 1;
+        int begin;
+        while (current.name.charAt(end) != '.') {
+            end--;
         }
-        return current.name.substring(1,i);
+        begin = end;
+        begin--;
+        while (current.name.charAt(begin) != '~') {
+            begin--;
+        }
+        begin++;
+        return current.name.substring(begin, end);
+    }
+
+    private String getThreadId(Node current) {
+        return String.valueOf(current.id);
     }
 
     private String getMethodName(Node current) {
-        int i=0;
-        while (current.name.charAt(i)!='.'){
-            i++;
+        int begin = current.name.length() - 1;
+        while (current.name.charAt(begin) != '.') {
+            begin--;
         }
-        i++;
-        return current.name.substring(i).replaceAll("[<>]", "");
-    }
-
-    public String getTraceResult() {
-        traverseTree(tree.getRoot());
-        finishString();
-        System.out.println(traceResult);
-        makeXML();
-        makeJSON();
-        return traceResult;
+        begin++;
+        return current.name.substring(begin).replaceAll("[<>]", "");
     }
 
     private void makeXML() {
@@ -112,11 +159,12 @@ public class TraceResult {
             try {
                 Transformer trans = TransformerFactory.newInstance().newTransformer();
                 DOMSource source = new DOMSource(doc);
-                FileOutputStream fos = new FileOutputStream("other.xml");
+                FileOutputStream fos = new FileOutputStream(PATH_TO_XML);
                 StreamResult result = new StreamResult(fos);
                 trans.setOutputProperty(OutputKeys.INDENT, "yes");
-                trans.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+                trans.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "3");
                 trans.transform(source, result);
+                fos.close();
             } catch (TransformerException | IOException e) {
                 e.printStackTrace(System.out);
             }
@@ -127,9 +175,8 @@ public class TraceResult {
 
     private void makeJSON() {
         JSONObject object = XML.toJSONObject(traceResult);
-        String jsonFilePath = System.getProperty("user.dir") + "\\file.json";
         try {
-            FileWriter fileWriter = new FileWriter(jsonFilePath);
+            FileWriter fileWriter = new FileWriter(PATH_TO_JSON);
             fileWriter.write(object.toString(4));
             fileWriter.flush();
             fileWriter.close();
