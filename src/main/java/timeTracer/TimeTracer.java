@@ -9,6 +9,14 @@ public class TimeTracer implements Tracer {
     private Tree tree = new Tree();
     private TraceResult traceResult = new TraceResult(tree);
 
+    public TimeTracer(){
+        StringBuilder address = new StringBuilder();
+        StackTraceElement[] elements = Thread.currentThread().getStackTrace();
+        address.append("~").append(elements[2].getClassName()).append(".").append(elements[2].getMethodName()).append("()");
+        tree.timeTracerName = String.valueOf(address);
+        System.out.println("ADDRESS: "+ tree.timeTracerName);
+    }
+
     @Override
     public void startTrace() {
         long startTime = System.currentTimeMillis();

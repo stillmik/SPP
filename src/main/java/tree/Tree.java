@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public class Tree {
 
     private Node root = new Node();
+    public String timeTracerName;
 
     public Tree() {
         root.address = "";

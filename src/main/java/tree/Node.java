@@ -6,8 +6,8 @@ public class Node {
 
     public long time;
     public long id;
-    public String address;//~MathOperations.sleep()~MathOperations.<init>()~Main.main()~main
-    public String name;//~MathOperations.sleep()
-    public ArrayList<Node> children;
+    public String address;//~MathOperations.<init>()~Main.main()~main
+    public String name;//~MathOperations.<init>()
+    public ArrayList<Node> children;//~MathOperations.sleep(),~MathOperations.sleepLong(), ...
 
 }

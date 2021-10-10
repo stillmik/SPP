@@ -1,14 +1,18 @@
 package math;
 
 import timeTracer.TimeTracer;
-import timeTracer.TraceResult;
 
 public class MathOperations {
 
-    private TimeTracer timeTracer = new TimeTracer();
-    private A a = new A(timeTracer);
+    private TimeTracer timeTracer;
+    private A a;
 
-    public MathOperations() {
+    public MathOperations(TimeTracer tracer) {
+        this.timeTracer = tracer;
+        a = new A(timeTracer);
+    }
+
+    public void largeTree(){
         Thread thread0 = new Thread(() -> {
 
             microSleep();
@@ -38,10 +42,32 @@ public class MathOperations {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        TraceResult traceResult = timeTracer.getTraceResult();
-        traceResult.getJSON();
-        traceResult.getXML();
-        traceResult.getXMLandJSONinConsole();
+    }
+
+    public void mediumTree(){
+        microSleep();
+        Thread thread1 = new Thread(this::sleepLong);
+        thread1.start();
+        sleepLong();
+        B b = new B(timeTracer);
+        b.sleep1000();
+
+        try {
+            thread1.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void smallTree(){
+        microSleep();
+        sleepLong();
+        B b = new B(timeTracer);
+        b.sleep1000();
+    }
+
+    public TimeTracer getTimeTracer() {
+        return timeTracer;
     }
 
     private void microSleep() {

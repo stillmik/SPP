@@ -81,4 +81,8 @@ public class TraceResult implements XMLAndJSONResult {
         System.out.println("\n\n");
         getJSONinConsole();
     }
+
+    public Tree getTree() {
+        return tree;
+    }
 }

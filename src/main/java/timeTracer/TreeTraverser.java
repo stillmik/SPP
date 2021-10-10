@@ -3,50 +3,65 @@ package timeTracer;
 import tree.Node;
 import tree.Tree;
 
-class TreeTraverser {
+public class TreeTraverser {
 
     private static String traceResult;
+    private static String timeTracerThreadName ="~java.lang.Thread.run()";
 
-    static String makeTraceResultString(Tree tree) {
+    public static String makeTraceResultString(Tree tree) {
         traceResult="<root>";
-        traverseTree(tree.getRoot());
+        setThreadsTime(tree.getRoot());
+        traverseTree(tree.getRoot(),tree.timeTracerName);
         finishString();
         System.out.println(traceResult);
         return traceResult;
     }
 
-    private static void traverseTree(Node current) {
-        Type type = getTypeOfNode(current);
-        if (type != Type.ROOT) {
-            open(current);
+    private static void setThreadsTime(Node current){
+        if (getTypeOfNode(current) == Type.THREAD) {
+            getTimeOfThread(current);
         }
         for (int i = 0; i < current.children.size(); i++) {
-            traverseTree(current.children.get(i));
+            setThreadsTime(current.children.get(i));
+        }
+    }
+
+    private static void traverseTree(Node current,String timeTracerName) {
+        Type type = getTypeOfNode(current);
+        if (type != Type.ROOT) {
+            open(current,timeTracerName);
+        }
+        for (int i = 0; i < current.children.size(); i++) {
+            traverseTree(current.children.get(i),timeTracerName);
         }
         if (type != Type.ROOT) {
-            close(current);
+            close(current,timeTracerName);
         }
     }
 
-    private static void open(Node current) {
+    private static void open(Node current,String timeTracerName) {
         Type type = getTypeOfNode(current);
         if (type == Type.METHOD) {
-            traceResult = traceResult + "<" + type.toString().toLowerCase() + " name=\"" + getMethodName(current) + "\"" + " class=\"" + getClass(current) + "\" time=\"" + current.time + "\"" + ">";
+            if(current.address.contains(timeTracerName)||current.address.contains(timeTracerThreadName)) {
+                traceResult = traceResult + "<" + type.toString().toLowerCase() + " name=\"" + getMethodName(current) + "\"" + " class=\"" + getClass(current) + "\" time=\"" + current.time + "\"" + ">";
+            }
         } else {
-            traceResult = traceResult + "<" + type.toString().toLowerCase() + " id=\"" + getThreadId(current) + "\"" + " time=\"" + getTimeOfThread(current) + "\"" + ">";
+            traceResult = traceResult + "<" + type.toString().toLowerCase() + " id=\"" + getThreadId(current) + "\"" + " time=\"" + current.time + "\"" + ">";
         }
     }
 
-    private static void close(Node current) {
+    private static void close(Node current,String timeTracerName) {
         Type type = getTypeOfNode(current);
         if (type == Type.METHOD) {
-            traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
-        } else {
+            if(current.address.contains(timeTracerName)||current.address.contains(timeTracerThreadName)) {
+                traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
+            }
+            } else {
             traceResult = traceResult + "</" + type.toString().toLowerCase() + ">" + "";
         }
     }
 
-    private static Type getTypeOfNode(Node node) {
+    public static Type getTypeOfNode(Node node) {
         if (node.name.equals("root")) {
             return Type.ROOT;
         }
@@ -92,7 +107,8 @@ class TreeTraverser {
             time.time = time.time + Math.toIntExact(current.children.get(i).time);
             timeOfThreadRecursion(current.children.get(i), time);
         }
-        return Integer.toString(time.time);
+        current.time=time.time;
+        return Long.toString(time.time);
     }
 
     private static void timeOfThreadRecursion(Node current, Time time) {
